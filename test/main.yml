@@ -1,9 +1,9 @@
 ---
-- name: testing::mount_nfs
+- name: testing::mount_cifs
   hosts: mainbox
   become: yes
   vars_files:
-    - mount_nfs.yml
+    - mount_cifs.yml
   roles:
-    - role: xemoe.mount_nfs
+    - role: xemoe.mount_cifs
 

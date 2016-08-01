@@ -1,0 +1,7 @@
+network_fs_base_directory: /mnt/cifs
+network_fs_mount_directory: cifs
+network_fs_mount_options: []
+network_fs_cifs_hostname: "192.168.1.100"
+network_fs_cifs_directory: "/some_path"
+network_fs_cifs_options: "username=,password="
+network_fs_active: true
