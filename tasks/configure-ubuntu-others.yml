@@ -8,7 +8,7 @@
   mount:
     name: "{{ __mount_to }}"
     src: "{{ __mount_src }}"
-    fstype: 'cifs'
+    fstype: "{{ network_fs_fs_type }}"
     fstab: "{{ network_fs_fstab_file }}"
     opts: "{{ __mount_options | join(',') }}"
     state: 'absent'
@@ -24,14 +24,14 @@
   mount:
     name: "{{ __mount_to }}"
     src: "{{ __mount_src }}"
-    fstype: 'cifs'
+    fstype: "{{ network_fs_fs_type }}"
     fstab: "{{ network_fs_fstab_file }}"
     opts: "{{ __mount_options | join(',') }}"
     state: 'present'
   when: network_fs_mount_type == "cifs" and network_fs_active == true
 
 - name: mount_network_fs | Unmount all
-  shell: "umount -t cifs --all"
+  shell: "umount -t {{ network_fs_fs_type }} --all"
 
 - name: mount_network_fs | Mount all
-  shell: "mount -t cifs -T {{ network_fs_fstab_file }} --all"
+  shell: "mount -t {{ network_fs_fs_type }} -T {{ network_fs_fstab_file }} --all"
