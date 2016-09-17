@@ -10,21 +10,26 @@
   with_items:
     - cifs-utils
 
+- set_fact:
+    __merged_options: "{{ network_fs_cifs_options + network_fs_mount_options }}"
+    __mount_to: "{{ network_fs_base_directory }}/{{ network_fs_cifs_hostname }}/{{ network_fs_mount_directory }}"
+    __mount_src: "//{{ network_fs_cifs_hostname }}/{{ network_fs_cifs_directory | regex_replace('^/', '') }}"
+
 - name: mount_network_fs | Umount CIFS share
   mount:
-    name: "{{ network_fs_base_directory }}/{{ network_fs_cifs_hostname }}/{{ network_fs_mount_directory }}"
-    src: "//{{ network_fs_cifs_hostname }}/{{ network_fs_cifs_directory | regex_replace('^/', '') }}"
+    name: "{{ __mount_to }}"
+    src: "{{ __mount_src }}"
     fstype: 'cifs'
-    opts: "{{ network_fs_cifs_options }},_netdev"
+    opts: "{{ __merged_options | join(',') }}"
     state: 'unmounted'
   when: network_fs_mount_type == "cifs" and network_fs_active == false and network_fs_cifs_options is defined
 
 - name: mount_network_fs | Mount CIFS share
   mount:
-    name: "{{ network_fs_base_directory }}/{{ network_fs_cifs_hostname }}/{{ network_fs_mount_directory }}"
-    src: "//{{ network_fs_cifs_hostname }}/{{ network_fs_cifs_directory | regex_replace('^/', '') }}"
+    name: "{{ __mount_to }}"
+    src: "{{ __mount_src }}"
     fstype: 'cifs'
-    opts: "{{ network_fs_cifs_options }},_netdev"
+    opts: "{{ __merged_options | join(',') }}"
     state: 'mounted'
   when: network_fs_mount_type == "cifs" and network_fs_active == true and network_fs_cifs_options is defined
 

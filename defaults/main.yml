@@ -1,7 +1,7 @@
 network_fs_base_directory: /mnt/cifs
 network_fs_mount_type: cifs
 network_fs_mount_directory: cifs
-network_fs_mount_options: []
+network_fs_mount_options: ["_netdev"]
 network_fs_cifs_hostname: ""
 network_fs_cifs_directory: ""
 network_fs_cifs_options: []
