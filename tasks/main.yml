@@ -20,16 +20,29 @@
     name: "{{ __mount_to }}"
     src: "{{ __mount_src }}"
     fstype: 'cifs'
+    fstab: "{{ network_fs_fstab_file }}"
     opts: "{{ __mount_options | join(',') }}"
-    state: 'unmounted'
-  when: network_fs_mount_type == "cifs" and network_fs_active == false and network_fs_cifs_options is defined
+    state: 'absent'
+  when: network_fs_mount_type == "cifs" and network_fs_active == false
 
-- name: mount_network_fs | Mount CIFS share
+- name: mount_network_fs | Create CIFS mount directory 
+  file:
+    name: "{{ __mount_to }}"
+    state: 'directory'
+  when: network_fs_mount_type == "cifs" and network_fs_active == true
+
+- name: mount_network_fs | Update CIFS mount fstab file 
   mount:
     name: "{{ __mount_to }}"
     src: "{{ __mount_src }}"
     fstype: 'cifs'
+    fstab: "{{ network_fs_fstab_file }}"
     opts: "{{ __mount_options | join(',') }}"
-    state: 'mounted'
-  when: network_fs_mount_type == "cifs" and network_fs_active == true and network_fs_cifs_options is defined
+    state: 'present'
+  when: network_fs_mount_type == "cifs" and network_fs_active == true
 
+- name: mount_network_fs | Unmount all
+  shell: "umount -t cifs --all"
+
+- name: mount_network_fs | Mount all
+  shell: "mount -t cifs -T {{ network_fs_fstab_file }} --all"

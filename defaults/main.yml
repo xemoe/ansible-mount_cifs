@@ -6,3 +6,4 @@ network_fs_cifs_hostname: ""
 network_fs_cifs_directory: ""
 network_fs_cifs_options: []
 network_fs_active: false
+network_fs_fstab_file: /opt/system-config.d/fstab
